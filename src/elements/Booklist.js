@@ -5,11 +5,21 @@ import './Booklist.css';
 const pageSize = 20;
 let currentPage = 1;
 
+
+const useInput = function ({ type /*...*/ }) {
+  const [value, setValue] = useState("");
+  const input = <input value={value} onChange={e => setValue(e.target.value)} type={type} />;
+  return [value, input];
+}
+
 export function BookList() {
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searching, setSearching] = useState(false);
   const [error, setError] = useState(null);
+
+  const [search, searchInput] = useInput({ type: "text" });
 
   const pageUp= () => {
     currentPage += 1;
@@ -21,8 +31,14 @@ export function BookList() {
     loadPage(currentPage);
   }
 
+  const startSearch = () => {
+    setSearching(true);
+    loadPage();
+  }
+
   const loadPage = (page = 1) => {
-    fetch(`http://localhost:7000/books?page=${page}`)
+    let query = searching ? `&titleSearch=${search}` : ""
+    fetch(`http://localhost:7000/books?page=${page}` + query)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error retrieving books: ${response.status}`)
@@ -52,6 +68,8 @@ export function BookList() {
       {error && (
         <div>{`There is a problem fetching the post data - ${error}`}</div>
       )}
+      {searchInput}
+      <button onClick={startSearch}>Search</button>
       <table className="main-table">
         <thead>
           <tr>
@@ -62,6 +80,7 @@ export function BookList() {
             <th>Finished</th>
           </tr>
         </thead>
+        <tbody>
         {data &&
           data.rows.map(({ id, title, date, recommend, authors, comment }) => (
             <tr key={id}>
@@ -72,6 +91,7 @@ export function BookList() {
               <td>{date}</td>
             </tr>
           ))}
+          </tbody>
       </table>
       {data && <div><p>Page {currentPage} of {Math.ceil(data.total_rows / pageSize) }.</p>
       <button onClick={() => pageUp()}>Next page</button></div>}
