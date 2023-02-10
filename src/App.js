@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from 'react';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard/Dashboard';
+import AddAuthor from "./components/Dashboard/AddAuthor";
+import AddBook from "./components/Dashboard/AddBook";
 
 export default function App() {
 
@@ -10,7 +12,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} >
+          <Route path="author" element= {<AddAuthor/>} />
+          <Route path="book" element= {<AddBook/>} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
