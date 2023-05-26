@@ -1,25 +1,32 @@
+import { useState } from 'react';
 
-export default function AuthorForm() {
+export default function AuthorForm({session}) {
+
+  console.log(`Session = ${session}`)
+
+  const [author, setAuthor] = useState("");
+
+  function handleInputChange(e) {
+    setAuthor(e.target.value);
+  }
 
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    const form = event.target;
-    const formData = new FormData(form);
-    const formJson = Object.fromEntries(formData.entries());
-    fetch('http://localhost:7000/add/author', { 
-      method: 'POST', 
-      body: JSON.stringify(formJson),
+    fetch('http://localhost:7000/add/author', {
+      method: 'POST',
+      body: JSON.stringify({ author, session }),
       headers: {
         'Content-Type': 'application/json'
-      } });
+      }
+    });
   }
 
   return (
     <form method="post" onSubmit={handleSubmit}>
       <label>
-        Author name: <input name="name"/>
+        Author name: <input name="name" value={author} onChange={handleInputChange} />
       </label>
       <hr />
       <button type="submit">Submit form</button>
