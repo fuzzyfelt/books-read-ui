@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react';
+import { Author } from "../types";
 
-const getDate = () => {
+interface BookFormType {
+  title: string, 
+  date: string,
+  recommend: string,
+  authors: string[],
+  comment: string,
+  publish_type: string,
+  publish_id: string,
+  session: string
+}
+
+
+const getDate = (): string => {
   const d = new Date();
   return [
     d.getFullYear(),
@@ -9,15 +22,15 @@ const getDate = () => {
   ].join('-');
 }
 
-export default function BookForm({session}) {
+export default function BookForm({session}:{session: string}) {
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [authors, setAuthors] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [authors, setAuthors] = useState<Author[] | null>(null);
 
   console.log(`Session = ${session}`)
 
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<BookFormType>({
     date: getDate(),
     title: "",
     authors: [],
@@ -29,7 +42,7 @@ export default function BookForm({session}) {
   });
 
 
-  function handleInputChange(e) {
+  function handleInputChange(e : any) {
 
     console.log(">>>" + JSON.stringify(formState));
 
@@ -39,7 +52,7 @@ export default function BookForm({session}) {
     //Handle authors multi-select
     if (target.name === 'authors') {
       const options = e.target.options;
-      const selected = [];
+      const selected : string[] = [];
       for (let i = 0; i < options.length; i++) {
         if (options[i].selected) {
           selected.push(options[i].value);
@@ -63,7 +76,7 @@ export default function BookForm({session}) {
       }));
   }
 
-  function handleSubmit(event) {
+  function handleSubmit(event: any) {
     event.preventDefault();
     console.log(formState);
     fetch('http://localhost:7000/add/book', {
@@ -108,7 +121,7 @@ export default function BookForm({session}) {
           </label>
           <br />
           <label>
-            Book Title: <input id="title" name="title" type="text" value={formState.title} onChange={handleInputChange} required minLength="3" />
+            Book Title: <input id="title" name="title" type="text" value={formState.title} onChange={handleInputChange} required minLength={3} />
           </label>
           <br />
           <label>
@@ -139,7 +152,7 @@ export default function BookForm({session}) {
           </label>
           </div>
           <br />
-          <textarea name="comment" id="comment" value={formState.comment} cols="30" rows="2" placeholder="Optional comment" onChange={handleInputChange}></textarea>
+          <textarea name="comment" id="comment" value={formState.comment} cols={30} rows={2} placeholder="Optional comment" onChange={handleInputChange}></textarea>
           <hr />
           <button type="submit">Submit form</button>
         </form>)}

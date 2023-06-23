@@ -4,7 +4,7 @@ import BookForm from "../../elements/BookForm";
 
 export default function AddBook() {
 
-  const {session} = useOutletContext()
+  const {session}: {session: string} = useOutletContext()
   console.log(`Sessionb = ${session}`)
   return <>
     <h1>Book Form</h1>

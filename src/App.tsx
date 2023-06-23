@@ -6,12 +6,10 @@ import AddAuthor from "./components/Dashboard/AddAuthor";
 import AddBook from "./components/Dashboard/AddBook";
 
 export default function App() {
-
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} >
           <Route path="author" element= {<AddAuthor/>} />
           <Route path="book" element= {<AddBook/>} />

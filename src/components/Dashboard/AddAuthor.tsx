@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router-dom";
 
 export default function AddAuthor() {
 
-  const {session} = useOutletContext()
+  const {session}: {session: string} = useOutletContext()
   console.log(`SessionA = ${session}`)
   return <>
     <h1>Author Form</h1>

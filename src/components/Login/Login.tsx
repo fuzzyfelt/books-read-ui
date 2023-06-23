@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './Login.css';
 
-async function loginUser(credentials) {
+async function loginUser(credentials: {username: string, password: string}) {
   return fetch('http://localhost:7000/login', {
     method: 'POST',
     headers: {
@@ -14,11 +14,11 @@ async function loginUser(credentials) {
     .then(data => data.json())
  }
 
-export default function Login({ setToken }) {
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
+export default function Login({ setToken }: { setToken: Function }) {
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     const token = await loginUser({
       username,

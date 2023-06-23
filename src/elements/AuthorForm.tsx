@@ -1,17 +1,17 @@
 import { useState } from 'react';
 
-export default function AuthorForm({session}) {
+export default function AuthorForm({session}:{session: string}) {
 
   console.log(`Session = ${session}`)
 
   const [author, setAuthor] = useState("");
 
-  function handleInputChange(e) {
+  function handleInputChange(e: any) {
     setAuthor(e.target.value);
   }
 
 
-  function handleSubmit(event) {
+  function handleSubmit(event: any) {
     event.preventDefault();
 
     fetch('http://localhost:7000/add/author', {

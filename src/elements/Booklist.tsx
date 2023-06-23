@@ -1,25 +1,26 @@
 import { useEffect, useState } from "react";
 import React from 'react';
 import './Booklist.css';
+import { Book, BookListData } from "../types";
 
 const pageSize = 20;
 let currentPage = 1;
 
 
-const useInput = function ({ type /*...*/ }) {
+const useInput = function ({ a }:{a: string}) {
   const [value, setValue] = useState("");
-  const input = <input value={value} onChange={e => setValue(e.target.value)} type={type} />;
+  const input = <input value={value} onChange={e => setValue(e.target.value)} type={a} />;
   return [value, input];
 }
 
 export function BookList() {
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<BookListData | null>(null);
   const [loading, setLoading] = useState(true);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState(null);
 
-  const [search, searchInput] = useInput({ type: "text" });
+  const [search, searchInput] = useInput({ a: "text" });
 
   const pageUp= () => {
     currentPage += 1;
@@ -82,13 +83,13 @@ export function BookList() {
         </thead>
         <tbody>
         {data &&
-          data.rows.map(({ id, title, date, recommend, authors, comment }) => (
+          data.rows.map(({ id, title, date, recommend, authors, comment }:Book ) => (
             <tr key={id}>
               <td>{title}</td>
               <td>{authors.join()}</td>
               <td>{recommend ? "⭐️" : "👎🏼"}</td>
               <td>{comment}</td>
-              <td>{date}</td>
+              <td>{date as string}</td>
             </tr>
           ))}
           </tbody>
