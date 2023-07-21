@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './Login.css';
 
-async function loginUser(credentials: {username: string, password: string}) {
+async function loginUser(credentials: { username: string, password: string }) {
   return fetch('http://localhost:7000/login', {
     method: 'POST',
     headers: {
@@ -12,11 +12,12 @@ async function loginUser(credentials: {username: string, password: string}) {
     body: JSON.stringify(credentials)
   })
     .then(data => data.json())
- }
+}
 
 export default function Login({ setToken }: { setToken: Function }) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [wrongpass, setWrongpass] = useState(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -24,26 +25,35 @@ export default function Login({ setToken }: { setToken: Function }) {
       username,
       password
     });
-    setToken(token);
+    if (token.error) {
+      console.log("An error occurred");
+      setWrongpass(true);
+    } else {
+      setWrongpass(false);
+      setToken(token);
+    }
   }
 
 
-  return(
+  return (
     <div className="login-wrapper">
       <h1>Please Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>
           <p>Username</p>
-          <input type="text" onChange={e => setUserName(e.target.value)}/>
+          <input type="text" onChange={e => setUserName(e.target.value)} />
         </label>
         <label>
           <p>Password</p>
-          <input type="password" onChange={e => setPassword(e.target.value)}/>
+          <input type="password" onChange={e => setPassword(e.target.value)} />
         </label>
         <div>
           <button type="submit">Submit</button>
         </div>
       </form>
+      { wrongpass &&
+        <p>Incorrect name and/or password</p>
+      }
     </div>
   )
 }

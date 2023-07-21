@@ -34,3 +34,27 @@
   font-weight: bold;
   color: #009879;
 }
+
+.nav-footer {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.nav-button {
+  margin-left: 1em;
+  margin-right: 1em
+}
+
+.search-box {
+
+  flex-basis: 200px;
+}
+
+.flex-form {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  align-items: center;
+}

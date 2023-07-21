@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Author } from "../types";
+import './BookForm.css';
 
 interface BookFormType {
   title: string, 
@@ -22,15 +23,11 @@ const getDate = (): string => {
   ].join('-');
 }
 
+
+
 export default function BookForm({session}:{session: string}) {
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const [authors, setAuthors] = useState<Author[] | null>(null);
-
-  console.log(`Session = ${session}`)
-
-  const [formState, setFormState] = useState<BookFormType>({
+  const emptyFormState = {
     date: getDate(),
     title: "",
     authors: [],
@@ -39,12 +36,19 @@ export default function BookForm({session}:{session: string}) {
     recommend: 'FALSE',
     comment: "",
     session: session
-  });
+  }
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [authors, setAuthors] = useState<Author[] | null>(null);
+  const [submitError, setSubmitError] = useState(false);
+
+  console.log(`Session = ${session}`)
+
+  const [formState, setFormState] = useState<BookFormType>(emptyFormState);
 
 
   function handleInputChange(e : any) {
-
-    console.log(">>>" + JSON.stringify(formState));
 
     const target = e.target;
     const name = target.name;
@@ -85,6 +89,13 @@ export default function BookForm({session}:{session: string}) {
       headers: {
         'Content-Type': 'application/json'
       }
+    }).then(response => {
+      if(response.ok) {
+        //clear the form
+        setFormState(emptyFormState);
+      } else {
+        setSubmitError(true);
+      }
     });
   }
 
@@ -114,6 +125,7 @@ export default function BookForm({session}:{session: string}) {
       {error && (
         <div>{`There is a problem fetching the post data - ${error}`}</div>
       )}
+      {submitError && <div>There was a problem submitting the form.</div>}
       {authors && (
         <form method="post" onSubmit={handleSubmit}>
           <label>

@@ -7,39 +7,29 @@ const pageSize = 20;
 let currentPage = 1;
 
 
-const useInput = function ({ a }:{a: string}) {
-  const [value, setValue] = useState("");
-  const input = <input value={value} onChange={e => setValue(e.target.value)} type={a} />;
-  return [value, input];
-}
-
 export function BookList() {
 
   const [data, setData] = useState<BookListData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [searching, setSearching] = useState(false);
   const [error, setError] = useState(null);
+  const [searchString, setSearchString] = useState("");
 
-  const [search, searchInput] = useInput({ a: "text" });
-
-  const pageUp= () => {
+  const pageUp = () => {
     currentPage += 1;
-    loadPage(currentPage);
+    setLoading(true);
   }
 
-  const pageDown= () => {
+  const pageDown = () => {
     currentPage -= 1;
-    loadPage(currentPage);
+    setLoading(true);
   }
 
-  const startSearch = () => {
-    setSearching(true);
-    loadPage();
-  }
 
-  const loadPage = (page = 1) => {
-    let query = searching ? `&titleSearch=${search}` : ""
-    fetch(`http://localhost:7000/books?page=${page}` + query)
+
+  useEffect(() => {
+    let query = searchString ? `&titleSearch=${searchString}` : "";
+    console.log(`Query: ${query}`)
+    fetch(`http://localhost:7000/books?page=${currentPage}` + query)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error retrieving books: ${response.status}`)
@@ -56,12 +46,16 @@ export function BookList() {
       .finally(() => {
         setLoading(false);
       });
+  }, [loading, searchString]);
+
+  function handleSearchChange(e : any) {
+    setSearchString(e.target.value);
   }
 
-  useEffect(() => {
-    loadPage(1);
-  }, []);
-
+  function handleSubmit(event: any) {
+    event.preventDefault();
+    setLoading(true);
+  }
 
   return (
     <div className="bookList">
@@ -69,8 +63,9 @@ export function BookList() {
       {error && (
         <div>{`There is a problem fetching the post data - ${error}`}</div>
       )}
-      {searchInput}
-      <button onClick={startSearch}>Search</button>
+      <form method="post" className="flex-form" onSubmit={handleSubmit}>
+        <input id="search" name="search" className="search-box" type="text" value={searchString} onChange={handleSearchChange}/>
+      </form>
       <table className="main-table">
         <thead>
           <tr>
@@ -82,20 +77,24 @@ export function BookList() {
           </tr>
         </thead>
         <tbody>
-        {data &&
-          data.rows.map(({ id, title, date, recommend, authors, comment }:Book ) => (
-            <tr key={id}>
-              <td>{title}</td>
-              <td>{authors.join()}</td>
-              <td>{recommend ? "⭐️" : "👎🏼"}</td>
-              <td>{comment}</td>
-              <td>{date as string}</td>
-            </tr>
-          ))}
-          </tbody>
+          {data && data.rows.length > 0 &&
+            data.rows.map(({ id, title, date, recommend, authors, comment }: Book) => (
+              <tr key={id}>
+                <td>{title}</td>
+                <td>{authors.join()}</td>
+                <td>{recommend ? "⭐️" : "👎🏼"}</td>
+                <td>{comment}</td>
+                <td>{date as string}</td>
+              </tr>
+            ))}
+            {data && data.rows.length === 0 &&
+            <tr><td>No results found.</td></tr>}
+        </tbody>
       </table>
-      {data && <div><p>Page {currentPage} of {Math.ceil(data.total_rows / pageSize) }.</p>
-      <button onClick={() => pageUp()}>Next page</button></div>}
-      {(currentPage > 1) && <button onClick={() => pageDown()}>Previous page</button>}
+      <div className="nav-footer">
+        { data && data.rows.length > 0 && <p>Page {currentPage} of {Math.ceil(data.total_rows / pageSize)}.</p> }
+        { (currentPage > 1) && <button className="nav-button" onClick={() => pageDown()}>Previous page</button> }
+        { data && Math.ceil(data.total_rows / pageSize) > 1 && <button className="nav-button" onClick={() => pageUp()}>Next page</button>}
+      </div>
     </div>);
 }

@@ -11,7 +11,7 @@ export default function Dashboard() {
   if (!token) {
     return <Login setToken={setToken} />
   }
-  console.log(`Token = ${token}`)
+  
   return (
     <>
       <h2>Dashboard</h2>
