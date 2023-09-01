@@ -83,7 +83,7 @@ export default function BookForm({session}:{session: string}) {
   function handleSubmit(event: any) {
     event.preventDefault();
     console.log(formState);
-    fetch('http://localhost:7000/add/book', {
+    fetch('add/book', {
       method: 'POST',
       body: JSON.stringify(formState),
       headers: {
@@ -100,7 +100,7 @@ export default function BookForm({session}:{session: string}) {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:7000/authors`)
+    fetch(`authors`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error retrieving authors: ${response.status}`)

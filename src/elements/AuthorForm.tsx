@@ -14,7 +14,7 @@ export default function AuthorForm({session}:{session: string}) {
   function handleSubmit(event: any) {
     event.preventDefault();
 
-    fetch('http://localhost:7000/add/author', {
+    fetch('/add/author', {
       method: 'POST',
       body: JSON.stringify({ author, session }),
       headers: {

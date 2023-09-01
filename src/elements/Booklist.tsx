@@ -28,7 +28,7 @@ export function BookList() {
   useEffect(() => {
     let query = searchString ? `&titleSearch=${searchString}` : "";
     console.log(`Query: ${query}`)
-    fetch(`http://localhost:7000/books?page=${currentPage}` + query)
+    fetch(`/books?page=${currentPage}` + query)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error retrieving books: ${response.status}`)
