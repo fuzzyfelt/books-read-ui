@@ -81,7 +81,7 @@ export function BookList() {
               <tr key={id}>
                 <td>{title}</td>
                 <td>{authors.join()}</td>
-                <td>{recommend ? "⭐️" : "👎🏼"}</td>
+                <td>{recommend ? "⭐️" : "-"}</td>
                 <td>{comment}</td>
                 <td>{date as string}</td>
               </tr>
