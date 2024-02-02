@@ -100,7 +100,7 @@ export default function BookForm({session}:{session: string}) {
   }
 
   useEffect(() => {
-    fetch(`authors`)
+    fetch(`/authors`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error retrieving authors: ${response.status}`)
