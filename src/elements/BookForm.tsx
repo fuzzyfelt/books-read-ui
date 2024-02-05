@@ -83,7 +83,7 @@ export default function BookForm({session}:{session: string}) {
   function handleSubmit(event: any) {
     event.preventDefault();
     console.log(formState);
-    fetch('add/book', {
+    fetch('/add/book', {
       method: 'POST',
       body: JSON.stringify(formState),
       headers: {
