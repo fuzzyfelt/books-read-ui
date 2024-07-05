@@ -1,3 +1,9 @@
+.bookList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .main-table {
   border-collapse: collapse;
   margin: 25px 0;
@@ -47,14 +53,13 @@
   margin-right: 1em
 }
 
-.search-box {
+.flex-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
 
+.search-box {
   flex-basis: 200px;
 }
 
-.flex-form {
-  display: flex;
-  flex-flow: row;
-  justify-content: flex-end;
-  align-items: center;
-}

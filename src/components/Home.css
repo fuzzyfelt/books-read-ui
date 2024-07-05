@@ -1,4 +1,6 @@
 .mainLayout {
   display: flex;
   flex-flow: column;
+  margin: auto;
+  max-width: 1024px;
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Author } from "../types";
 import './BookForm.css';
 
@@ -37,6 +38,8 @@ export default function BookForm({session}:{session: string}) {
     comment: "",
     session: session
   }
+
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -91,8 +94,7 @@ export default function BookForm({session}:{session: string}) {
       }
     }).then(response => {
       if(response.ok) {
-        //clear the form
-        setFormState(emptyFormState);
+        navigate('/dashboard');
       } else {
         setSubmitError(true);
       }

@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function AuthorForm({session}:{session: string}) {
 
   console.log(`Session = ${session}`)
+  const navigate = useNavigate();
 
   const [author, setAuthor] = useState("");
+  const [result, setResult] = useState("")
 
   function handleInputChange(e: any) {
     setAuthor(e.target.value);
@@ -20,6 +23,13 @@ export default function AuthorForm({session}:{session: string}) {
       headers: {
         'Content-Type': 'application/json'
       }
+    }).then(response => {
+      if(!response.ok) {
+        //problem
+        setResult("An error occurred")
+      } else {
+        navigate('/dashboard');
+      }
     });
   }
 
@@ -30,6 +40,7 @@ export default function AuthorForm({session}:{session: string}) {
       </label>
       <hr />
       <button type="submit">Submit form</button>
+      <p>{result}</p>
     </form>
   )
 }
